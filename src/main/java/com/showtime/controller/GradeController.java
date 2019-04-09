@@ -16,7 +16,6 @@ public class GradeController {
 	private GradeService gradeService;
 
 	@PostMapping("/addGrade")
-	//@ResponseBody
 	public String addGrade(String m_grade, String m_id, HttpSession session) {
 		int first = Integer.parseInt(m_id);
 		int u_id = (int) session.getAttribute("u_id");
@@ -28,7 +27,6 @@ public class GradeController {
 	}
 
 	@PutMapping("/updateGrade")
-	//@ResponseBody
 	public String updateGrade(String m_grade, String m_id, HttpSession session) {
 		int u_id = (int) session.getAttribute("u_id");
 		int first = Integer.parseInt(m_id);

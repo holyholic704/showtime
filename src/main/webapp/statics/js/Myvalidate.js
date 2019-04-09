@@ -78,15 +78,14 @@ $().ready(function() {
 })
 
 function doVerify() {
-	var account = $(".register-bar input[name='username']").val();
-	if (account != "") {
+	var username = $(".register-bar input[name='username']").val();
+	if (username != "") {
 		$.ajax({
 			url : "/showtime/verifyAccout",
-			data : {
-				"username" : account
-			},
+			data : username,
 			type : "post",
-			datatype : "text",
+			datatype : "json",
+			contentType : "application/json",
 			success : function(msg) {
 				if ("true" != msg) {
 					alert("该账号已经存在");
@@ -100,16 +99,15 @@ function doVerify() {
 }
 
 function sendMail() {
-	var account = $(".register-bar input[name='username']").val();
-	if (account != "") {
+	var username = $(".register-bar input[name='username']").val();
+	if (username != "") {
 		$("#send").val("发送中");
 		$.ajax({
 			url : "/showtime/send",
-			data : {
-				"username" : account
-			},
+			data : username,
 			type : "post",
-			datatype : "text",
+			datatype : "json",
+			contentType : "application/json",
 			success : function(msg) {
 				$("#send").val("发送成功");
 			}
@@ -124,11 +122,10 @@ function doMailVerify() {
 	if (code != "") {
 		$.ajax({
 			url : "/showtime/doMailVerify",
-			data : {
-				"code" : code
-			},
+			data : code,
 			type : "post",
-			datatype : "text",
+			datatype : "json",
+			contentType : "application/json",
 			success : function(msg) {
 				if ("true" != msg) {
 					alert("验证码错误");
