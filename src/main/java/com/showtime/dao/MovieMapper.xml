@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.showtime.dao.MovieDao">
+	<select id="selectLatestMovie" resultType="movie">
+		SELECT *
+		FROM movie
+		ORDER BY m_date DESC
+	</select>
+
+	<select id="selectOneMovie" resultType="movie">
+		SELECT *
+		FROM movie
+		WHERE
+		m_id = #{m_id}
+	</select>
+
+	<select id="selectAllMovie" resultType="movie">
+		SELECT *
+		FROM movie
+	</select>
+
+	<!-- 根据类型、国家查找电影 -->
+	<select id="selectMovieByCategory" resultType="movie">
+		SELECT
+		*
+		FROM
+		movie
+		WHERE
+		${categories} LIKE '%' #{category} '%'
+	</select>
+
+	<!-- 其他类型电影 -->
+	<select id="selectMovieByOtherCategory" resultType="movie">
+		SELECT
+		*
+		FROM
+		movie
+		WHERE
+		m_type NOT REGEXP '剧情|动作|喜剧|科幻|传记|动画|恐怖|悬疑|战争'
+	</select>
+
+	<!-- 其他国家电影 -->
+	<select id="selectMovieByOtherCountry" resultType="movie">
+		SELECT
+		*
+		FROM
+		movie
+		WHERE
+		m_country not in(
+		'中国','韩国','美国','日本'
+		)
+	</select>
+
+	<!-- 根据年份查找电影 -->
+	<select id="selectMovieByDate" resultType="movie">
+		SELECT
+		*
+		FROM
+		movie
+		WHERE
+		YEAR(m_date) = #{m_date}
+	</select>
+
+	<!-- 其他年份的电影 -->
+	<select id="selectMovieByOtherDate" resultType="movie">
+		SELECT
+		*
+		FROM
+		movie
+		WHERE
+		YEAR(m_date) &lt; 2010
+	</select>
+</mapper>

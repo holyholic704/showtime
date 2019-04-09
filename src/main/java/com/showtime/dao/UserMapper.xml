@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.showtime.dao.UserDao">
+	<!-- 登录 -->
+	<select id="selectOneUser" resultType="user">
+		select *
+		from user
+		where
+		username=#{username} and password=#{password}
+	</select>
+
+	<!-- 注册前查找是否有重名 -->
+	<select id="selectUsername" resultType="string">
+		select username
+		from user
+		where username=#{username}
+	</select>
+
+	<!-- 注册 -->
+	<insert id="insertOneUser">
+		insert into user
+		(username,password)
+		values
+		(#{username},#{password})
+	</insert>
+</mapper>

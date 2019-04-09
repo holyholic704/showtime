@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.showtime.dao.GradeDao">
+	<!-- 查找一部电影评分 -->
+	<select id="selectMovieGrade" resultType="double">
+		select
+		truncate(avg(m_grade),1) from grade where m_id = #{m_id}
+	</select>
+
+	<!-- 给一部电影评分 -->
+	<insert id="insertMovieGrade">
+		INSERT INTO grade (m_id, m_grade, u_id)
+		SELECT
+		#{m_id},
+		#{m_grade}, #{u_id}
+		FROM DUAL
+		WHERE NOT EXISTS (
+		SELECT
+		m_id,u_id
+		FROM grade
+		WHERE m_id = #{m_id} AND u_id =
+		#{u_id}
+		);
+	</insert>
+
+	<!-- 修改电影评分 -->
+	<update id="updateMovieGrade">
+		update grade
+		set m_grade=#{m_grade}
+		where
+		m_id=#{m_id}
+		and
+		u_id=#{u_id}
+	</update>
+
+	<!-- 查找一部电影用户的评分 -->
+	<select id="selectMovieGradeByU_id" resultType="double">
+		select
+		m_grade
+		from grade
+		where
+		m_id=#{m_id}
+		and
+		u_id=#{u_id}
+	</select>
+
+	<resultMap type="grade" id="findName">
+		<id property="m_id" column="m_id" />
+		<result property="m_grade" column="gg" />
+		<result property="m_id" column="gi" />
+		<association property="movie" javaType="movie">
+			<id property="m_id" column="m_id" />
+			<result property="m_name" column="mm" />
+		</association>
+	</resultMap>
+
+	<!-- 评分最高的十部电影 -->
+	<select id="selectMostTen" resultMap="findName">
+		SELECT
+		g.m_id gi,
+		m.m_name
+		mm,
+		g.grade gg
+		FROM
+		movie m
+		JOIN (
+		SELECT
+		m_id,
+		avg(m_grade) grade
+		FROM
+		grade
+		GROUP BY
+		m_id
+		ORDER BY
+		m_grade DESC
+		LIMIT 10
+		) g ON g.m_id = m.m_id
+	</select>
+</mapper>
